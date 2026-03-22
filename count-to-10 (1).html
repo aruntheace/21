@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Count to 10!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#fffbea;--bg2:#fff8d6;--card:rgba(255,255,255,0.82);--border:rgba(251,191,36,0.25);
+  --sun:#f59e0b;--sky:#38bdf8;--orange:#f97316;--green:#22c55e;--red:#ef4444;
+  --text:#1c1400;--dim:rgba(28,20,0,0.45);--r:18px;
+}
+html,body{height:100%;height:100dvh;}
+body{
+  background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;
+  display:flex;justify-content:center;align-items:flex-start;overflow:hidden;
+  background-image:
+    radial-gradient(ellipse at 20% 0%,rgba(253,224,71,.55) 0,transparent 45%),
+    radial-gradient(ellipse at 80% 10%,rgba(251,191,36,.3) 0,transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(56,189,248,.12) 0,transparent 50%);
+}
+.screen{
+  width:100%;max-width:430px;height:100vh;height:100dvh;
+  display:flex;flex-direction:column;padding:14px 16px;gap:9px;overflow:hidden;
+}
+.hidden{display:none!important;}
+.fredoka{font-family:'Fredoka One',cursive;}
+.btn{
+  border:none;border-radius:50px;padding:15px 28px;
+  font-family:'Fredoka One',cursive;font-size:1.25rem;cursor:pointer;
+  transition:transform .12s,box-shadow .12s;letter-spacing:.02em;width:100%;
+}
+.btn:active{transform:scale(.95);}
+.btn-coral{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;box-shadow:0 8px 22px rgba(245,158,11,.45);}
+.btn-cyan{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;box-shadow:0 8px 22px rgba(56,189,248,.4);}
+.btn-yellow{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 8px 22px rgba(249,115,22,.4);}
+
+/* ═ START ═ */
+#startScreen{justify-content:center;align-items:center;gap:14px;text-align:center;}
+.logo{
+  font-family:'Fredoka One',cursive;font-size:3.8rem;line-height:1;
+  background:linear-gradient(135deg,#f59e0b 0%,#f97316 50%,#fde047 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 18px rgba(245,158,11,.6));}50%{filter:drop-shadow(0 0 28px rgba(249,115,22,.5));}}
+.logo-sub{font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:4px;}
+.players-strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.pchip{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.85);border:1.5px solid rgba(251,191,36,.35);border-radius:50px;
+  padding:7px 14px;font-size:.82rem;font-weight:800;color:var(--text);
+}
+.pchip.you{border-color:rgba(56,189,248,.5);background:rgba(56,189,248,.1);color:#0369a1;}
+.diff-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);}
+.diff-row{display:flex;gap:10px;width:100%;}
+.diff-btn{
+  flex:1;background:rgba(255,255,255,.8);border:2.5px solid rgba(251,191,36,.25);border-radius:16px;
+  padding:14px 8px;cursor:pointer;transition:all .18s;text-align:center;font-family:'Nunito',sans-serif;
+}
+.diff-btn:active{transform:scale(.95);}
+.diff-btn .diff-em{font-size:2rem;display:block;margin-bottom:5px;}
+.diff-btn .diff-name{font-family:'Fredoka One',cursive;font-size:1.1rem;display:block;color:var(--text);}
+.diff-btn .diff-desc{font-size:.7rem;font-weight:700;color:var(--dim);display:block;margin-top:3px;line-height:1.4;}
+.diff-btn.easy-btn.sel{border-color:#22c55e;background:rgba(34,197,94,.1);color:#15803d;}
+.diff-btn.hard-btn.sel{border-color:#ef4444;background:rgba(239,68,68,.1);color:#b91c1c;}
+.how-card{
+  background:rgba(255,255,255,.8);border:1px solid rgba(251,191,36,.25);border-radius:var(--r);
+  padding:14px 16px;text-align:left;width:100%;
+}
+.how-card h3{font-family:'Fredoka One',cursive;font-size:1rem;color:#d97706;margin-bottom:8px;}
+.how-card li{
+  list-style:none;font-size:.8rem;color:var(--dim);padding-left:20px;
+  position:relative;line-height:1.45;margin-bottom:4px;
+}
+.how-card li::before{content:'→';position:absolute;left:0;color:#f97316;}
+
+/* ═ GAME ═ */
+#gameScreen{gap:8px;}
+.progress-wrap{flex-shrink:0;}
+.progress-labels{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.progress-lbl{font-family:'Fredoka One',cursive;font-size:.88rem;color:#d97706;}
+.progress-bar-bg{background:rgba(251,191,36,.18);border-radius:50px;height:8px;overflow:hidden;border:1px solid rgba(251,191,36,.3);}
+.progress-bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#fde047,#f59e0b,#f97316);transition:width .5s cubic-bezier(.4,0,.2,1);}
+.diff-pill{border-radius:50px;padding:4px 12px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+.diff-pill.easy{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);color:#15803d;}
+.diff-pill.hard{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);color:#b91c1c;}
+.rules-panel{background:rgba(255,255,255,.82);border:1px solid rgba(251,191,36,.25);border-radius:14px;padding:8px 12px;flex-shrink:0;}
+.panel-lbl{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:5px;}
+.rules-row{display:flex;flex-wrap:wrap;gap:5px;}
+.rtag{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:50px;padding:2px 9px;font-size:.74rem;font-weight:800;color:#b45309;white-space:nowrap;}
+.rtag b{color:var(--text);font-weight:900;}
+.no-rules-txt{font-size:.74rem;color:rgba(28,20,0,.28);font-style:italic;}
+.players-row{display:flex;gap:6px;flex-shrink:0;}
+.pcard{
+  flex:1;background:rgba(255,255,255,.8);border:2px solid transparent;border-radius:14px;
+  padding:8px 4px;text-align:center;transition:all .3s;position:relative;min-width:0;
+}
+.pcard.active{border-color:#f59e0b;background:rgba(245,158,11,.1);transform:translateY(-3px);box-shadow:0 6px 20px rgba(245,158,11,.3);}
+.pcard.active.is-you{border-color:#38bdf8;background:rgba(56,189,248,.1);box-shadow:0 6px 20px rgba(56,189,248,.3);}
+.pcard.eliminated{opacity:.35;filter:grayscale(1);}
+.pcard .pem{font-size:1.4rem;}
+.pcard .pname{font-size:.57rem;font-weight:800;margin-top:2px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.turn-pip{
+  position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  background:#f59e0b;color:#fff;font-size:.46rem;font-weight:900;
+  padding:2px 7px;border-radius:50px;white-space:nowrap;text-transform:uppercase;
+}
+.pcard.is-you .turn-pip{background:#38bdf8;color:#fff;}
+.pcard .elim-badge{position:absolute;top:-6px;right:-6px;font-size:.8rem;}
+.count-box{background:rgba(255,255,255,.82);border:1px solid rgba(251,191,36,.25);border-radius:var(--r);padding:10px 14px;text-align:center;flex-shrink:0;}
+.count-lbl-sm{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:2px;}
+.count-big{font-family:'Fredoka One',cursive;font-size:3rem;line-height:1;color:#d97706;}
+.seq-box{background:rgba(255,255,255,.82);border:1px solid rgba(251,191,36,.25);border-radius:14px;padding:8px 12px;flex-shrink:0;}
+.seq-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+.seq-scroll::-webkit-scrollbar{display:none;}
+.sitem{background:rgba(245,158,11,.1);border-radius:9px;padding:4px 10px;font-size:.8rem;font-weight:800;white-space:nowrap;flex-shrink:0;color:var(--text);}
+.sitem.newest{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;animation:popIn .3s ease;}
+.sitem.was-rule{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#0369a1;}
+.sitem.cpu-err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);color:#b91c1c;}
+@keyframes popIn{0%{transform:scale(0);opacity:0;}75%{transform:scale(1.12);}100%{transform:scale(1);opacity:1;}}
+.action-area{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;min-height:0;}
+.action-hint{text-align:center;font-size:.8rem;font-weight:800;color:var(--dim);}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.opt-btn{
+  background:rgba(255,255,255,.9);border:2px solid rgba(251,191,36,.28);border-radius:14px;
+  padding:17px 8px;font-family:'Fredoka One',cursive;font-size:1.3rem;
+  color:var(--text);cursor:pointer;transition:all .15s;text-align:center;
+  box-shadow:0 2px 8px rgba(245,158,11,.12);
+}
+.opt-btn:active{transform:scale(.93);}
+.opt-btn.flash-ok{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important;}
+.opt-btn.flash-bad{background:#ef4444!important;border-color:#ef4444!important;color:#fff!important;}
+.freeze-row{display:flex;align-items:center;gap:10px;}
+.freeze-btn{
+  flex:none;background:rgba(56,189,248,.1);border:2px solid rgba(56,189,248,.35);
+  border-radius:50px;padding:11px 18px;font-family:'Fredoka One',cursive;
+  font-size:.88rem;color:#0369a1;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+}
+.freeze-btn:active{transform:scale(.94);}
+.freeze-btn:disabled{opacity:.3;pointer-events:none;}
+.freeze-badge{
+  background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;border-radius:50px;
+  width:20px;height:20px;font-size:.65rem;display:flex;align-items:center;
+  justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;
+}
+.waiting-box{
+  background:rgba(255,255,255,.82);border:1px solid rgba(251,191,36,.25);border-radius:var(--r);
+  padding:18px 16px;text-align:center;font-size:.88rem;font-weight:800;color:var(--dim);line-height:1.6;
+}
+.dot-anim::after{content:'.';animation:dots 1.4s steps(3,end) infinite;}
+@keyframes dots{0%{content:'.';}33%{content:'..';}66%,100%{content:'...';}}
+
+/* ═ ADD RULE ═ */
+#addRuleScreen{justify-content:center;align-items:center;gap:14px;text-align:center;}
+.trophy-anim{font-size:4rem;animation:trophyIn .5s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes trophyIn{0%{transform:scale(0) rotate(-15deg);}80%{transform:scale(1.1) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
+.win-title{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#d97706;}
+.win-sub{font-size:.83rem;font-weight:700;color:var(--dim);}
+.rule-card{width:100%;background:rgba(255,255,255,.88);border:1px solid rgba(251,191,36,.25);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;}
+.rule-card label{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);display:block;margin-bottom:6px;}
+.num-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.num-btn{
+  width:42px;height:42px;border-radius:11px;border:2px solid rgba(251,191,36,.3);
+  background:rgba(255,255,255,.95);color:var(--text);font-family:'Fredoka One',cursive;
+  font-size:.95rem;cursor:pointer;transition:all .15s;position:relative;
+}
+.num-btn:active{transform:scale(.9);}
+.num-btn.sel{border-color:#38bdf8;background:rgba(56,189,248,.15);color:#0369a1;}
+.num-btn.taken{border-color:rgba(245,158,11,.45);color:#d97706;}
+.num-btn.taken::after{
+  content:'✓';position:absolute;top:-5px;right:-5px;width:13px;height:13px;
+  background:#f59e0b;color:#fff;border-radius:50%;font-size:.5rem;
+  display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-weight:900;
+}
+.word-inp{
+  background:rgba(255,255,255,.95);border:2px solid rgba(251,191,36,.35);border-radius:12px;
+  padding:13px 15px;font-family:'Fredoka One',cursive;font-size:1.1rem;
+  color:var(--text);width:100%;outline:none;transition:border-color .2s;
+}
+.word-inp:focus{border-color:#38bdf8;}
+.word-inp::placeholder{color:rgba(28,20,0,.22);font-size:.88rem;}
+
+/* ═ WIN ═ */
+#winScreen{justify-content:center;align-items:center;gap:16px;text-align:center;}
+.win-big{font-size:5rem;animation:winPop .7s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes winPop{0%{transform:scale(0) rotate(-20deg);}80%{transform:scale(1.2) rotate(5deg);}100%{transform:scale(1) rotate(0);}}
+.win-headline{font-family:'Fredoka One',cursive;font-size:2.5rem;
+  background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.win-sub2{font-size:.86rem;font-weight:700;color:var(--dim);max-width:280px;}
+.stars-row{display:flex;gap:6px;font-size:1.8rem;justify-content:center;animation:starsIn .5s .3s both;}
+@keyframes starsIn{0%{opacity:0;transform:scale(.5);}100%{opacity:1;transform:scale(1);}}
+
+/* ═ GAME OVER ═ */
+#gameOverScreen{justify-content:center;align-items:center;gap:14px;text-align:center;}
+.go-icon{font-size:4.5rem;animation:goIn .6s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes goIn{0%{transform:scale(0);}80%{transform:scale(1.15);}100%{transform:scale(1);}}
+.go-title{font-family:'Fredoka One',cursive;font-size:2.2rem;color:#f97316;}
+.go-score{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#d97706;}
+.go-msg{font-size:.82rem;font-weight:700;color:var(--dim);max-width:280px;line-height:1.5;}
+.final-card{width:100%;background:rgba(255,255,255,.82);border:1px solid rgba(251,191,36,.25);border-radius:var(--r);padding:13px 15px;text-align:left;}
+.final-card h3{font-family:'Fredoka One',cursive;font-size:.92rem;color:#0369a1;margin-bottom:9px;}
+.final-seq{display:flex;flex-wrap:wrap;gap:6px;}
+.fitem{background:rgba(245,158,11,.1);border-radius:9px;padding:4px 11px;font-size:.84rem;font-weight:800;color:var(--text);}
+.fitem.fr{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:#0369a1;}
+
+/* ═ TOAST ═ */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);
+  background:rgba(28,20,0,.88);border:1px solid rgba(251,191,36,.4);backdrop-filter:blur(12px);
+  border-radius:50px;padding:10px 22px;font-size:.86rem;font-weight:800;
+  color:#fff;z-index:999;transition:transform .3s cubic-bezier(.175,.885,.32,1.275);
+  white-space:nowrap;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div id="startScreen" class="screen">
+  <div>
+    <div class="logo fredoka">Count to 10!</div>
+    <div class="logo-sub">The Memory Word Game</div>
+  </div>
+  <div class="players-strip">
+    <div class="pchip you"><span>🧒</span> You</div>
+    <div class="pchip"><span>🤖</span> Robo Rex</div>
+    <div class="pchip"><span>🐸</span> Byte Bot</div>
+    <div class="pchip"><span>⚡</span> Zap Zap</div>
+  </div>
+  <div class="diff-label">Choose your difficulty</div>
+  <div class="diff-row">
+    <button class="diff-btn easy-btn sel" id="easyBtn" onclick="selectDiff('easy')">
+      <span class="diff-em">🐣</span>
+      <span class="diff-name">Easy</span>
+      <span class="diff-desc">Computers can forget rules too! You can actually beat them!</span>
+    </button>
+    <button class="diff-btn hard-btn" id="hardBtn" onclick="selectDiff('hard')">
+      <span class="diff-em">🔥</span>
+      <span class="diff-name">Hard</span>
+      <span class="diff-desc">Computers never forget. Pure memory challenge!</span>
+    </button>
+  </div>
+  <ul class="how-card">
+    <h3>📖 How to Play</h3>
+    <li>Players take turns counting <strong>1 to 10</strong></li>
+    <li>Whoever says <strong>"10"</strong> wins the round and adds a secret rule</li>
+    <li>Numbers get replaced by <strong>silly words</strong> — remember them!</li>
+    <li>Say the wrong word → <strong>Game Over!</strong></li>
+    <li>Survive <strong>7 rounds</strong> to win the game 🏆</li>
+    <li>Use <strong>🧠 Brain Freeze</strong> once to reveal the correct answer!</li>
+  </ul>
+  <button class="btn btn-coral fredoka" onclick="startGame()">🚀 Let's Play!</button>
+</div>
+
+<!-- GAME -->
+<div id="gameScreen" class="screen hidden">
+  <div class="progress-wrap">
+    <div class="progress-labels">
+      <div class="progress-lbl fredoka">⭐ Round <span id="roundNum">1</span> / 7</div>
+      <div id="diffPillWrap"></div>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+  <div class="rules-panel">
+    <div class="panel-lbl">📋 Active Rules</div>
+    <div class="rules-row" id="rulesList"><span class="no-rules-txt">No rules yet — first round is easy!</span></div>
+  </div>
+  <div class="players-row" id="playersRow"></div>
+  <div class="count-box">
+    <div class="count-lbl-sm">Current Count</div>
+    <div class="count-big fredoka" id="countDisplay">1</div>
+  </div>
+  <div class="seq-box">
+    <div class="panel-lbl">💬 This Round</div>
+    <div class="seq-scroll" id="seqScroll"></div>
+  </div>
+  <div class="action-area" id="actionArea"></div>
+</div>
+
+<!-- ADD RULE -->
+<div id="addRuleScreen" class="screen hidden">
+  <div class="trophy-anim" id="winTrophy">🏆</div>
+  <div class="win-title fredoka" id="winTitle">You Won the Round!</div>
+  <div class="win-sub">Pick a number and give it a secret name!</div>
+  <div class="rule-card">
+    <div>
+      <label>Replace which number?</label>
+      <div class="num-grid" id="numGrid"></div>
+    </div>
+    <div>
+      <label>What's its new name?</label>
+      <input class="word-inp" id="wordInp" type="text" maxlength="12" placeholder="Type something fun!" autocomplete="off"/>
+    </div>
+    <button class="btn btn-cyan fredoka" onclick="confirmHumanRule()">✅ Set the Rule!</button>
+  </div>
+</div>
+
+<!-- WIN -->
+<div id="winScreen" class="screen hidden">
+  <div class="win-big">🏆</div>
+  <div class="stars-row">⭐⭐⭐⭐⭐⭐⭐</div>
+  <div class="win-headline fredoka">You Won!!</div>
+  <div class="win-sub2">You survived all 7 rounds and remembered every rule. You're a memory superstar! 🌟</div>
+  <div class="final-card">
+    <h3>🎯 Your Final Sequence</h3>
+    <div class="final-seq" id="winFinalSeq"></div>
+  </div>
+  <button class="btn btn-yellow fredoka" onclick="resetGame()">🔄 Play Again</button>
+</div>
+
+<!-- GAME OVER -->
+<div id="gameOverScreen" class="screen hidden">
+  <div class="go-icon" id="goIcon">😅</div>
+  <div class="go-title fredoka">Oops!</div>
+  <div class="go-score fredoka" id="goScore">0 / 7 rounds</div>
+  <div class="go-msg" id="goMsg"></div>
+  <div class="final-card">
+    <h3>🎯 The Correct Sequence Was</h3>
+    <div class="final-seq" id="finalSeq"></div>
+  </div>
+  <button class="btn btn-coral fredoka" onclick="resetGame()">🔄 Try Again</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WIN_ROUNDS = 7;
+const PLAYERS = [
+  {name:'You',      short:'You',  type:'human',    em:'🧒'},
+  {name:'Robo Rex', short:'Rex',  type:'computer', em:'🤖'},
+  {name:'Byte Bot', short:'Byte', type:'computer', em:'🐸'},
+  {name:'Zap Zap',  short:'Zap',  type:'computer', em:'⚡'},
+];
+const WORD_POOL = [
+  'Banana','Zoom','Wiggle','Pizza','Boing','Sparkle','Woosh','Giggle',
+  'Fluffy','Kaboom','Fizz','Wham','Noodle','Zippity','Boingo','Sploosh',
+  'Twizzle','Kapow','Mango','Bloop','Snorf','Blip','Razzle','Bongo',
+  'Quack','Fizzle','Wibble','Zork','Flump','Kazoom','Snazzy','Plonk',
+];
+
+let difficulty = 'easy';
+let G = {};
+
+function selectDiff(d) {
+  difficulty = d;
+  document.getElementById('easyBtn').classList.toggle('sel', d==='easy');
+  document.getElementById('hardBtn').classList.toggle('sel', d==='hard');
+}
+
+function initState() {
+  G = {
+    rules:{}, count:1, startIdx:0, round:1, score:0,
+    log:[], phase:'counting', lock:false,
+    usedWords:[], eliminated:[], freezeUsed:false,
+  };
+}
+
+// ── HELPERS ──
+function playerAt(countVal) {
+  // Rotate through active (non-eliminated) players
+  const active = [0,1,2,3].filter(i => !G.eliminated.includes(i));
+  if (!active.length) return 0;
+  const baseIdx = active.indexOf(G.startIdx % 4);
+  const from = baseIdx >= 0 ? baseIdx : 0;
+  return active[(from + countVal - 1) % active.length];
+}
+
+function correctAnswer(n) { return G.rules[n] ?? String(n); }
+
+function cpuMistakeChance() {
+  if (difficulty === 'hard') return 0;
+  const ruleCount = Object.keys(G.rules).length;
+  if (G.round < 4 || ruleCount === 0) return 0;
+  // Gradual: 7% per rule beyond 1, +4% per round beyond 3
+  return Math.min(0.38, (ruleCount - 1) * 0.07 + (G.round - 3) * 0.04);
+}
+
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function showToast(msg, dur=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+function showScreen(id) {
+  ['startScreen','gameScreen','addRuleScreen','winScreen','gameOverScreen']
+    .forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));
+}
+
+// ── RENDER ──
+function render() {
+  // Progress
+  document.getElementById('roundNum').textContent = G.round;
+  document.getElementById('progressFill').style.width = ((G.round-1)/WIN_ROUNDS*100)+'%';
+  document.getElementById('diffPillWrap').innerHTML = difficulty==='easy'
+    ? '<span class="diff-pill easy">🐣 Easy</span>'
+    : '<span class="diff-pill hard">🔥 Hard</span>';
+
+  // Rules
+  const rl = document.getElementById('rulesList');
+  const keys = Object.keys(G.rules).map(Number).sort((a,b)=>a-b);
+  rl.innerHTML = keys.length
+    ? keys.map(n=>`<div class="rtag"><b>${n}</b>→${G.rules[n]}</div>`).join('')
+    : '<span class="no-rules-txt">No rules yet!</span>';
+
+  // Players
+  const active = playerAt(G.count);
+  document.getElementById('playersRow').innerHTML = PLAYERS.map((p,i)=>{
+    const isActive = i===active, isElim = G.eliminated.includes(i), isYou = p.type==='human';
+    return `<div class="pcard ${isActive?'active':''} ${isYou?'is-you':''} ${isElim?'eliminated':''}">
+      ${isActive?`<div class="turn-pip">${isYou?'YOU':'THEM'}</div>`:''}
+      ${isElim?'<div class="elim-badge">💥</div>':''}
+      <div class="pem">${p.em}</div>
+      <div class="pname">${p.short}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('countDisplay').textContent = G.count;
+
+  // Sequence
+  const se = document.getElementById('seqScroll');
+  if (!G.log.length) {
+    se.innerHTML='<span style="font-size:.75rem;color:rgba(232,244,255,.22);font-style:italic;white-space:nowrap;">Round starting…</span>';
+  } else {
+    se.innerHTML = G.log.map((item,i)=>{
+      const isNew = i===G.log.length-1;
+      const hadRule = G.rules[item.count]!==undefined;
+      return `<div class="sitem ${isNew?'newest':''} ${hadRule&&!isNew?'was-rule':''} ${item.cpuErr?'cpu-err':''}">${item.said}</div>`;
+    }).join('');
+    se.scrollLeft = se.scrollWidth;
+  }
+
+  // Action
+  renderAction();
+}
+
+function renderAction() {
+  const el = document.getElementById('actionArea');
+  const pIdx = playerAt(G.count);
+  const p = PLAYERS[pIdx];
+  if (p.type==='human') {
+    const correct = correctAnswer(G.count);
+    const opts = makeOptions(G.count, correct);
+    el.innerHTML = `
+      <div class="action-hint">👆 Tap the right answer for <b>${G.count}</b>!</div>
+      <div class="opts-grid">
+        ${opts.map(o=>`<button class="opt-btn fredoka" onclick="humanTap('${esc(o)}','${esc(correct)}',this)">${o}</button>`).join('')}
+      </div>
+      <div class="freeze-row">
+        <button class="freeze-btn" id="freezeBtn" onclick="useBrainFreeze('${esc(correct)}')" ${G.freezeUsed?'disabled':''}>
+          🧠 Brain Freeze <span class="freeze-badge">${G.freezeUsed?'✓':'1'}</span>
+        </button>
+        <span style="font-size:.7rem;font-weight:700;color:var(--dim);line-height:1.4;">
+          ${G.freezeUsed?'Lifeline used!':'Reveals the answer — once per game!'}
+        </span>
+      </div>`;
+  } else {
+    el.innerHTML=`<div class="waiting-box">${p.em} <strong>${p.name}</strong> is thinking<span class="dot-anim"></span></div>`;
+  }
+}
+
+function esc(s){return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'" );}
+
+function makeOptions(n, correct) {
+  const pool = new Set([correct]);
+  if (G.rules[n]) pool.add(String(n));
+  for (const w of Object.values(G.rules)) { if (pool.size>=4) break; if(!pool.has(w)) pool.add(w); }
+  const nums = shuffle([1,2,3,4,5,6,7,8,9,10].map(String));
+  for (const x of nums) { if (pool.size>=4) break; if(!pool.has(x)) pool.add(x); }
+  return shuffle([...pool]).slice(0,4);
+}
+
+// ── BRAIN FREEZE ──
+function useBrainFreeze(correct) {
+  if (G.freezeUsed) return;
+  G.freezeUsed = true;
+  showToast(`🧠 Brain Freeze! The answer is "${correct}"`, 3000);
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    if (b.textContent.trim()===correct) {
+      b.classList.add('flash-ok');
+      setTimeout(()=>b.classList.remove('flash-ok'),2500);
+    }
+  });
+  const fb = document.getElementById('freezeBtn');
+  if (fb) { fb.disabled=true; fb.querySelector('.freeze-badge').textContent='✓'; }
+}
+
+// ── GAME FLOW ──
+function startGame() { initState(); showScreen('gameScreen'); render(); kickCpu(); }
+function resetGame() { showScreen('startScreen'); }
+
+function kickCpu() {
+  if (G.phase==='counting' && PLAYERS[playerAt(G.count)].type==='computer')
+    setTimeout(runComputerTurn, 900);
+}
+
+function humanTap(chosen, correct, btn) {
+  if (G.lock || G.phase!=='counting') return;
+  G.lock = true;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.style.pointerEvents='none');
+  if (chosen===correct) {
+    btn.classList.add('flash-ok');
+    setTimeout(()=>advance(chosen,false),500);
+  } else {
+    btn.classList.add('flash-bad');
+    document.querySelectorAll('.opt-btn').forEach(b=>{ if(b.textContent.trim()===correct) b.classList.add('flash-ok'); });
+    setTimeout(()=>triggerGameOver(chosen,correct),1300);
+  }
+}
+
+function advance(said, cpuErr) {
+  G.log.push({count:G.count, said, cpuErr:!!cpuErr});
+  // Update seq inline without full re-render
+  const se = document.getElementById('seqScroll');
+  se.querySelectorAll('.sitem.newest').forEach(x=>x.classList.remove('newest'));
+  const hadRule = G.rules[G.count]!==undefined;
+  const div = document.createElement('div');
+  div.className = `sitem newest ${hadRule?'was-rule':''} ${cpuErr?'cpu-err':''}`;
+  div.textContent = said;
+  se.appendChild(div);
+  se.scrollLeft = se.scrollWidth;
+
+  if (G.count===10) {
+    const winner = playerAt(10);
+    setTimeout(()=>startRulePhase(winner),400);
+  } else {
+    G.count++;
+    G.lock = false;
+    document.getElementById('countDisplay').textContent = G.count;
+    renderAction();
+    // Update player highlight
+    const active = playerAt(G.count);
+    document.querySelectorAll('.pcard').forEach((c,i)=>{
+      const isActive=i===active, isYou=PLAYERS[i].type==='human';
+      c.classList.toggle('active',isActive);
+      c.querySelectorAll('.turn-pip').forEach(x=>x.remove());
+      if (isActive) {
+        const pip=document.createElement('div');
+        pip.className='turn-pip';pip.textContent=isYou?'YOU':'THEM';
+        c.prepend(pip);
+      }
+    });
+    kickCpu();
+  }
+}
+
+function runComputerTurn() {
+  if (G.phase!=='counting') return;
+  const pIdx = playerAt(G.count);
+  if (PLAYERS[pIdx].type!=='computer') return;
+
+  const correct = correctAnswer(G.count);
+  const chance = cpuMistakeChance();
+  const canMistake = G.rules[G.count] !== undefined; // only mistake on rule-replaced numbers
+  const doMistake = canMistake && chance > 0 && Math.random() < chance;
+
+  if (doMistake) {
+    const wrong = String(G.count); // says the original number instead of the word
+    G.log.push({count:G.count, said:wrong, cpuErr:true});
+
+    const se = document.getElementById('seqScroll');
+    se.querySelectorAll('.sitem.newest').forEach(x=>x.classList.remove('newest'));
+    const div = document.createElement('div');
+    div.className='sitem newest cpu-err'; div.textContent=wrong;
+    se.appendChild(div); se.scrollLeft=se.scrollWidth;
+
+    setTimeout(()=>{
+      showToast(`💥 ${PLAYERS[pIdx].name} forgot the rule and said "${wrong}"! Out!`, 2500);
+      G.eliminated.push(pIdx);
+      const activePlayers = [0,1,2,3].filter(i=>!G.eliminated.includes(i));
+      if (activePlayers.length===1 && activePlayers[0]===0) {
+        // Human is only one left — they win by default
+        setTimeout(()=>startRulePhase(0), 1200);
+      } else {
+        G.count++;
+        G.lock=false;
+        render();
+        kickCpu();
+      }
+    },800);
+    return;
+  }
+
+  advance(correct, false);
+  if (G.phase==='counting' && PLAYERS[playerAt(G.count)].type==='computer')
+    setTimeout(runComputerTurn,900);
+}
+
+// ── RULE PHASE ──
+function startRulePhase(winnerIdx) {
+  G.phase='addRule';
+  if (PLAYERS[winnerIdx].type==='human') {
+    showHumanRuleScreen();
+  } else {
+    computerAddsRule(winnerIdx);
+  }
+}
+
+function showHumanRuleScreen() {
+  const grid = document.getElementById('numGrid');
+  grid.innerHTML='';
+  for (let n=1;n<=10;n++) {
+    const b=document.createElement('button');
+    b.className=`num-btn fredoka ${G.rules[n]?'taken':''}`;
+    b.textContent=n; b.dataset.n=n;
+    b.onclick=()=>{ grid.querySelectorAll('.num-btn').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); };
+    grid.appendChild(b);
+  }
+  document.getElementById('wordInp').value='';
+  document.getElementById('winTrophy').textContent='🏆';
+  document.getElementById('winTitle').textContent='You Won the Round!';
+  showScreen('addRuleScreen');
+}
+
+function confirmHumanRule() {
+  const sel=document.querySelector('.num-btn.sel');
+  const word=document.getElementById('wordInp').value.trim();
+  if (!sel){showToast('⬆️ Pick a number first!');return;}
+  if (!word||word.length<2){showToast('✏️ Type a fun word!');return;}
+  const n=Number(sel.dataset.n);
+  G.rules[n]=word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
+  nextRound();
+}
+
+function computerAddsRule(winnerIdx) {
+  const winner=PLAYERS[winnerIdx];
+  showScreen('gameScreen');
+  document.getElementById('actionArea').innerHTML=`
+    <div class="waiting-box">${winner.em} <strong>${winner.name}</strong> won!<br>
+    <span style="color:var(--cyan)">Adding a new rule<span class="dot-anim"></span></span></div>`;
+  setTimeout(()=>{
+    const avail=WORD_POOL.filter(w=>!G.usedWords.includes(w)&&!Object.values(G.rules).includes(w));
+    const word=avail.length?avail[Math.floor(Math.random()*avail.length)]:'Bloop'+G.round;
+    const free=[1,2,3,4,5,6,7,8,9,10].filter(n=>!G.rules[n]);
+    const n=free.length?free[Math.floor(Math.random()*free.length)]:Math.ceil(Math.random()*10);
+    G.rules[n]=word; G.usedWords.push(word);
+    document.getElementById('actionArea').innerHTML=`
+      <div class="waiting-box" style="border-color:rgba(56,189,248,.3);background:rgba(56,189,248,.07);">
+        ${winner.em} New rule!<br>
+        <span style="color:var(--yellow);font-size:1.1rem"><b>${n}</b> is now <b>"${word}"</b>!</span>
+      </div>`;
+    setTimeout(nextRound,1800);
+  },1500);
+}
+
+function nextRound() {
+  G.score++;
+  if (G.score>=WIN_ROUNDS){triggerWin();return;}
+  G.round++; G.count=1; G.log=[]; G.lock=false;
+  G.phase='counting'; G.eliminated=[];
+  G.startIdx=(G.startIdx+1)%4;
+  showScreen('gameScreen'); render();
+  const rc=Object.keys(G.rules).length;
+  showToast(`🎯 Round ${G.round} — ${rc} rule${rc!==1?'s':''} to remember!`,2000);
+  kickCpu();
+}
+
+function triggerWin() {
+  document.getElementById('winFinalSeq').innerHTML=[1,2,3,4,5,6,7,8,9,10].map(n=>{
+    const r=G.rules[n]!==undefined;
+    return `<div class="fitem ${r?'fr':''}">${correctAnswer(n)}</div>`;
+  }).join('');
+  showScreen('winScreen');
+}
+
+function triggerGameOver(chosen, correct) {
+  G.phase='gameOver';
+  const medals=G.score>=6?'🥇':G.score>=3?'🥈':G.score>=1?'🥉':'😅';
+  document.getElementById('goIcon').textContent=medals;
+  document.getElementById('goScore').textContent=`${G.score} / 7 rounds survived`;
+  document.getElementById('goMsg').textContent=
+    `You said "${chosen}" but it should have been "${correct}". So close — try again and beat your score!`;
+  document.getElementById('finalSeq').innerHTML=[1,2,3,4,5,6,7,8,9,10].map(n=>{
+    const r=G.rules[n]!==undefined;
+    return `<div class="fitem ${r?'fr':''}">${correctAnswer(n)}</div>`;
+  }).join('');
+  showScreen('gameOverScreen');
+}
+</script>
+</body>
+</html>
