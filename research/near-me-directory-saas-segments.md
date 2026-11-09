@@ -1,87 +1,105 @@
-# "Near Me" Directory + Vertical SaaS: Segment Research
+# "Near Me" Directory + Vertical SaaS: Segment Research (v2)
 
-*Data: Ahrefs API v3, US database, pulled 2026-11-09. 120 keywords and 8 SERPs checked, about 3,500 API units used.*
+*Data: Ahrefs API v3, US database, pulled 2026-11-09. About 9,700 API units used in total.*
 
-## What I was looking for
+## How v2 was done
 
-1. **Directory side:** a `<service> near me` keyword with real volume, low Keyword Difficulty (KD), and a CPC high enough to show that businesses pay for leads. The organic results should be weak: Yelp, Facebook, Reddit and DR 0–10 local sites, not strong niche directories.
-2. **Data side:** every operator has a Google Business Profile (a real category, a physical address or service area, phone, hours and reviews). That makes the whole directory scrapeable.
-3. **SaaS side:** a fragmented market of small owner-operated businesses with a repeating workflow (routes, recurring service, compliance paperwork, quotes, bookings). There should be zero to three vertical software players, not a crowd. Reaching $5–10K MRR takes about 50–100 customers at $99/mo, so a few thousand US operators is enough.
+In v1 I picked about 120 keywords by hand. That missed many of the best segments.
 
-**What I ruled out:** dentists, HVAC, pest control, roofing, garage doors, locksmiths and towing. They have huge volume but the lead-gen giants (Angi, HomeAdvisor, Thumbtack) and large vertical SaaS companies (ServiceTitan, etc.) already own them. Their CPCs are high for exactly that reason.
+For v2 I asked Ahrefs for **every** "... near me" keyword that met all of these at once:
 
----
+- **Volume:** at least 3,000 searches a month.
+- **Keyword difficulty (KD):** 20 or lower.
+- **Cost per click (CPC):** at least $1.50, which shows businesses pay for these leads.
+- **Weak results:** at least one site with domain rating 15 or lower already ranks in the top 5.
 
-## Top 20 segments, ranked
+That returned the top 200 by volume. I then checked 55 more keywords by hand for rental, B2B, pet and specialty trades, because my v2 filter had accidentally excluded anything with "rent" in it.
 
-US volume, KD (0–100) and CPC are from Ahrefs. The SaaS-competition column is my own market read, not Ahrefs data. Check it before you build.
+Finally I grouped the keywords into **clusters**. One directory site and one software product cover every keyword in a cluster, so volumes below are cluster totals.
 
-| # | Segment (seed keyword) | US vol/mo | KD | CPC | City check | Who ranks today | SaaS competition |
-|---|---|---|---|---|---|---|---|
-| 1 | **Dumpster rental** | 60,000 | 36 | $1.60 | *miami*: 1,000 / KD 0 / **$8.00**; *houston*: 1,200 / KD 8 / $3.50 | Franchise and broker sites (DR 38–56), Yelp, a DR 8 local site at #8 | Moderate (Docket, CurbWaste, Hauler Hero), but most haulers still run on spreadsheets |
-| 2 | **Septic tank pumping** | 51,000 | 50 | $2.50 | *atlanta*: 150 / $9.00 | Yelp #3, then **DR 1, 11 and 4 local sites at #4–6** | Low–moderate (ServiceCore plus a few small tools) |
-| 3 | **Mold remediation** | 61,000 | **0** | **$7.00** | *houston*: 1,200 / KD 0 / **$11** | — | Restoration tools (Encircle, DocuSketch) target bigger firms. Small remediators are underserved |
-| 4 | **Gutter cleaning** | 55,000 | **5** | **$8.00** | — | — | Generic field-service apps (Jobber etc.). No gutter-specific quote tool stands out |
-| 5 | **Boat storage** (+ RV storage 29K) | 36,000 | **2** | $1.60 | *tampa*: 200 / KD 5 | **DR 0–6 storage sites** pulling 6K–45K visits, Neighbor.com, Yelp | Low. Self-storage software ignores waitlists, lot maps and launch scheduling |
-| 6 | **Powder coating** | 21,000 | **0** | $1.10 | *houston*: 80 | Yelp, FB, DR 1–3 shops, powdercoatingnearme.com (DR 9, weak) | Very low. Job shops quote and track jobs on paper |
-| 7 | **Mobile RV repair** | 11,000 | **0** | $1.50 | *phoenix*: 70 | **rvhelp.com (DR 70)** is the incumbent directory, then Yelp | Low. RV Help is the main player (directory plus dispatch) |
-| 8 | **Golf cart repair** | 9,400 | **0** | $1.10 | *tampa*: 80 | thecartfinder (DR 36), golfcartresource (DR 64), Yelp | Very low. Heavy in Florida, Arizona and Carolina retirement communities |
-| 9 | **Chimney sweep** | 14,000 | 28 | $3.50 | *denver*: 350 / KD 0 / **$10** | Yelp, Reddit, Angi, BBB, **DR 0 sweeps** at #8 and #10 | Low (generic field-service apps). Room for an NFPA 211 inspection-report tool |
-| 10 | **Sewer camera inspection** | 3,300 | **0** | **$10.00** | *los angeles*: 100 / **$25** | — | Low. Report and video-sharing tools for realtors and buyers |
-| 11 | **Grease trap cleaning** | 900 | **0** | **$6.00** | *houston*: 60 / $10 | **Yelp only (7 of 10 results)**, DR 0–1 sites | Very low. Restaurants need city FOG compliance manifests. B2B |
-| 12 | **Porta potty rental** | 3,600 | 53 | $3.00 | *houston*: 250 / $4 | — | Moderate (ServiceCore). Bundle with #1 and #2 |
-| 13 | **Stump grinding** (+ tree removal 46K) | 11,000 | 28 | $3.00 | *atlanta*: 100 / $4 | — | Moderate (Arborgold, SingleOps), but stump-only crews are solo operators |
-| 14 | **Piano tuner** | 5,600 | **13** | $1.30 | — | — | Gazelle is the one dominant player. That proves the model, but it's taken |
-| 15 | **Land surveyor** | 7,600 | **5** | $1.50 | *dallas*: 80 | — | Low for small firms: quote intake and job tracking |
-| 16 | **Well drilling** | 5,900 | 47 | $2.50 | — | — | Very low. Well logs, water-test reminders, pump service |
-| 17 | **Epoxy flooring** | 10,000 | 31 | $1.90 | *houston*: 200 | — | Low. Garage-floor quote estimators |
-| 18 | **Process server** | 1,300 | **0** | $1.40 | *houston*: 150 | — | Moderate (ServeManager is the leader). Directory is the easier win |
-| 19 | **Ceramic coating / window tint** | 28,000 / 127,000 | 0 / 47 | $2.50 / $2.00 | — | — | Moderate (Tint Wiz, Urable, Mobile Tech RX) |
-| 20 | **Cryotherapy / hyperbaric** | 17,000 / 2,200 | 2 / 0 | $1.00 / $1.50 | *hyperbaric miami*: 150 / KD 2 | — | Moderate. Mindbody-type booking tools. Good for memberships |
-
-### How I'd tier them
-
-**Tier A: build these first** (good directory economics and thin SaaS competition)
-- **Waste and pumping cluster: dumpster + septic + porta potty + grease trap.** It's one buyer type (route-based haulers with trucks), one software product (dispatch, asset or tank tracking, compliance manifests, online booking with zip-code pricing) and four directories that cross-link. Your Miami dumpster directory fits right in: **"dumpster rental miami" has 1K/mo at KD 0 with an $8 CPC.**
-- **Mold remediation and gutter cleaning.** These are the best raw directory numbers in the set. KD 0–5 with $7–8 CPC means you can sell leads from day one, even before the SaaS exists.
-- **Powder coating, golf cart repair, boat and RV storage.** KD 0–2 with big volume. The owners are traditional job shops or lot operators that almost no vertical SaaS targets.
-
-**Tier B: good, with one caveat each**
-- Mobile RV repair: a strong incumbent directory (RV Help).
-- Chimney sweep: seasonal.
-- Sewer camera inspection: small volume, but very high value per lead.
-- Stump grinding, land surveyor, well drilling, epoxy flooring.
-
-**Tier C: directory plays where the SaaS is already taken**
-- Piano tuner (Gazelle), process server (ServeManager), tint and ceramic coating, cryotherapy.
+Still excluded: mainstream dental, medical, legal, insurance, car dealers, HVAC, roofing and pest control. They pass the KD filter, but the software side is crowded and the leads are already sold by big platforms.
 
 ---
 
-## SaaS ideas per cluster (small builds)
+## Top 20 clusters, ranked
 
-| Cluster | Software to build | Price |
+Ranking weighs volume, CPC, how weak the current results are, and how thin the software market is. All numbers are US "near me" figures from Ahrefs. The "Software gap" column is my own read of the market.
+
+| # | Cluster | Keywords inside (searches/mo · KD · CPC) | Cluster volume | Software gap |
+|---|---|---|---|---|
+| 1 | **Vehicle, boat and RV storage** | car storage 61K·0·$2 · boat storage 36K·2·$1.6 · RV storage 29K·50 · vehicle storage 27K·0·$2 · camper storage 11K·8 · trailer storage 9.1K·2 | **~173K** | **High.** Self-storage software is built for indoor units, not outdoor lots. Top results include **DR 0–6 storage sites getting 18K–121K visits a month** |
+| 2 | **Air duct, dryer vent and chimney** | duct cleaning 58K·0·**$5** · dryer vent cleaning 26K·0·**$6** · chimney sweep 14K·28·$3.5 · hood cleaning 1K·0 | **~99K** | **High.** No vertical software. Needs inspection reports with before/after photos and annual reminders |
+| 3 | **Exterior cleaning and seasonal** | gutter cleaning 55K·5·**$8** · gutter repair 26K·2·**$8** · pressure washing 25K·22 · power washing 20K·2·$4 · Christmas light installation 20K·0·$3 · window cleaning 13K·10 · roof cleaning 12K·12·**$7** · solar panel cleaning 10K·0·$3 | **~181K** | **Med-high.** Mostly generic field-service apps. Few instant-quote tools that work from satellite measurement |
+| 4 | **Septic** | septic pumping 51K·50 · septic repair 36K·**2**·$3.5 · septic tank repair 34K·**1**·$3.5 · septic service 14K·2 · grease trap 0.9K·0·$6 | **~136K** | **Medium.** ServiceCore plus small tools. Top results include DR 1–11 local sites |
+| 5 | **Water treatment and testing** | water testing 31K·0·$3 · water softener companies 17K·0·**$9** · well drilling 5.9K·47 · well pump repair 4.9K·43·$6 · backflow testing 1.6K·0·**$10** | **~60K** | **High.** Fits a dealer CRM with salt-delivery routes, filter-change reminders and backflow compliance filing |
+| 6 | **Wildlife removal** | bat removal 10K·2·$3 · wildlife removal 7.1K·1·**$4.5** · squirrel removal 4.7K·6·**$5** · raccoon removal 3.6K·9·$3.5 · snake removal 1.9K·0·$3 | **~27K** | **High.** Almost no vertical software. Needs trap-check logs (required by state law), exclusion quotes and warranty tracking |
+| 7 | **Drain and specialty plumbing** | hydro jetting 46K·0·**$10** · drain cleaning companies 14K·1 · garbage disposal repair 11K·0·**$16** · leak detection 9.5K·1·$6 · sewer camera 3.3K·0·$10 | **~84K** | **Low for software** (plumbers already use ServiceTitan and Housecall Pro). **Very strong for selling leads**: results are Roto-Rooter, Yelp and DR 1–2 local sites |
+| 8 | **Mold, fire and water restoration** | mold remediation 61K·0·**$7** · water damage restoration services 20K·5 · mold removal company 16K·2·$6 · fire restoration 8.6K·0·**$9** | **~106K** | **Medium** (Encircle, DASH). The money here is selling leads |
+| 9 | **Dog training, boarding and walking** | dog boarding 115K·8·$2 · dog training 67K·3·$1.8 · dog daycare 21K·38 · dog trainers 15K·6 · dog hotels 13K·0 · cat boarding 12K·12 · mobile vet 11K·0 · dog walker 3.9K·0·$2.5 | **~258K** | Boarding software is crowded (Gingr, MoeGo). **Dog-trainer software is thin**: packages, homework videos, progress tracking |
+| 10 | **EV charger and home window tinting** | EV charger installation 38K·0·**$5** · house window tinting 19K·2·$2.5 · home window tinting 11K·0·$3 | **~68K** | **High.** Needs a quoting tool (EV: panel-load check and rebates; tint: film quotes from window measurements) |
+| 11 | **Specialty auto (independent shops)** | exhaust shop 22K·0 · diesel mechanic 16K·0·$2.5 · car window repair 11K·6 · trailer repair 9.6K·0 · mobile tire service 6.4K·0 · trailer hitch installation 6.6K·1 | **~72K** | **Med-high** for mobile tire, trailer and exhaust shops (Fullbay only covers heavy-duty). General auto shops are crowded |
+| 12 | **Detailing and paint protection** | car detailing 136K·5·$1.5 · ceramic coating 28K·0·$2.5 · detailing 25K·0 · mobile detailing 19K·60 · paint protection film (PPF) 14K·13·**$4** | **~222K** | **Medium** (Urable, Mobile Tech RX). Huge directory traffic |
+| 13 | **Irrigation, turf and snow** | sprinkler repair 15K·61 · irrigation repair 14K·**0**·$3.5 · snow removal 12K·0 · artificial turf 4.5K·0 | **~45K** | **Med-high.** Needs zone maps, seasonal start-up and shut-down routes, and snow logs that protect against slip-and-fall claims |
+| 14 | **Independent equipment and dumpster rental** | dumpster rental 60K·36 · skid steer rental 9.8K·2 · scissor lift rental 8K·4 · mini excavator rental 2.8K·41 · roll off dumpster 2.1K·0·$2.5 · storage container rental 1.4K·0·**$6** | **~84K** | **Medium.** Independent yards are underserved. Your **Miami dumpster directory belongs here** ("dumpster rental miami": 1K/mo, KD 0, $8 CPC) |
+| 15 | **Home finishing specialty** | deck staining 11K·1·$3.5 · epoxy flooring 10K·31 · concrete repair 8.4K·0·$4.5 · cabinet painting 8.3K·0·**$6** · tile & grout cleaning 4K·0·$3.5 | **~42K** | **High.** Needs before/after photo quoting and sq-ft estimators |
+| 16 | **Medical weight-loss clinics (GLP-1)** | B12 shots 16K·0 · Ozempic near me 11K·10·**$12** · tirzepatide near me 9.8K·1·**$10** | **~37K** | **Medium.** Selling leads is very valuable, but medical advertising rules apply |
+| 17 | **Laser tattoo removal and aesthetics** | microneedling 34K·0 · lip filler(s) 52K·0 · Hydrafacial 27K·0 · tattoo removal 24K·0·$3 · chemical peel 12K·0 | **~150K** | Med-spa software is crowded. Tattoo-removal studios specifically are thin |
+| 18 | **Mandated commercial inspections (B2B)** | forklift repair 2.3K·0·$3.5 · fire extinguisher inspection 1.9K·1·$2.5 · backflow 1.6K·$10 · hood cleaning 1K · grease trap 0.9K·$6 | ~8K | **Best software fit, smallest traffic.** Due-date compliance software sells itself |
+| 19 | **Towing** | tow truck 132K·**1**·$3 · towing company 34K·11 | **~166K** | Towbook is the leader. Strong urgent-call lead selling |
+| 20 | **Round-1 picks that still hold** | powder coating 21K·0 · golf cart repair 9.4K·0 · mobile RV repair 11K·0 · land surveyor 7.6K·5 · piano tuner 5.6K·13 | ~55K | See v1 notes. Low CPC but very thin software |
+
+### Directory-only traffic plays (KD ≈ 0, big volume, weak software opportunity)
+
+These earn from ads and leads, not software.
+
+| Keyword | Volume | KD |
 |---|---|---|
-| Dumpster / porta potty | Online booking widget with zip-code pricing, bin location tracking, swap and pickup dispatch board, overdue-rental alerts | $99–199/mo |
-| Septic / grease trap | Tank records by address, pump-out reminders, county or city compliance manifests (PDF), route optimizer | $99–149/mo |
-| Mold / sewer camera / chimney | Branded inspection reports (photos, readings, video link) for homeowners and realtors | $49–99/mo |
-| Gutter / pressure washing / epoxy | Instant quote from satellite roof or driveway measurement, plus a seasonal re-service reminder SMS | $49–99/mo |
-| Powder coating / golf cart repair | Job intake, status SMS ("your rims are ready"), photo log, simple invoicing | $49–99/mo |
-| Boat and RV storage | Waitlist, lot map, recurring billing, launch-request scheduling | $99–199/mo |
-
-Your directory doubles as the sales list. Each listing's owner is a lead you can contact, and a "claim your listing" flow gives you a way in.
+| alterations | 106,000 | 0 |
+| wheel alignment / alignment | ~220,000 | 0 |
+| preschool / daycare | ~138,000 | 1–9 |
+| wedding venues | 51,000 | 0 |
+| passport photos | 45,000 | 0 |
+| print shop | 42,000 | 12 |
+| laundry service / wash and fold | 32,000 | 0–1 |
+| jet ski rental | 19,000 | 0 |
+| tutoring ($5 CPC) | 18,000 | 0 |
+| engraving | 18,000 | 3 |
+| barber school | 15,000 | 0 |
+| CNA programs | ~24,000 | 0 |
 
 ---
 
-## Notes and caveats
+## What the results pages showed (organic results under the map pack)
 
-- **"Near me" volumes are national.** Ahrefs measures a "near me" SERP from one sample location; most of these SERPs were checked from Wichita, KS. Your traffic will come from `<service> <city>` and `<service> in <city>` pages. The city checks above are the realistic per-page targets, typically 50–1,200 a month per city.
-- **The local pack sits above all these organic results.** A directory wins the organic slots under it, and those are mostly Yelp and thin local sites, which you can beat.
-- **KD 0** means the top-10 pages have almost no backlinks. A directory with real data (photos, hours, prices, reviews summary) on each city page should rank.
-- **Google Business Profile data:** scraping GBP violates Google's terms of service. The Places API also restricts how long you can store its data. Most directory builders use Outscraper or Apify-type exports and then add data from each business's own website (pricing, service area, bin sizes). Budget for that enrichment, because it is what makes a directory worth ranking.
-- **Operator counts and SaaS competitor names are my estimates, not Ahrefs data.** Check each segment in a G2 or Capterra search before you commit to it.
+| Keyword | Who ranks |
+|---|---|
+| car storage near me | `selfstorageks.com` **DR 0** (121K traffic), `ustorwichita.com` **DR 6**, Public Storage DR 73, Yelp, Facebook group |
+| boat storage near me | **DR 0–6** storage sites at #3, #6, #8 and #10, Neighbor.com DR 73, Yelp |
+| hydro jetting near me | Roto-Rooter ×2, Yelp, **DR 1–2** local plumbers, Reddit, YouTube |
+| septic tank pumping near me | Yelp, **DR 1, 11 and 4** local septic companies at #4–6 |
+| grease trap cleaning near me | Yelp ×7, **DR 0–1** sites |
+| chimney sweep near me | Yelp, Reddit, Angi, BBB, **DR 0** sweeps |
+| powder coating near me | Yelp, Facebook, **DR 1–3** shops, powdercoatingnearme.com (DR 9) |
+| golf cart repair near me | thecartfinder (DR 36), golfcartresource (DR 64), Yelp |
+| mobile RV repair near me | rvhelp.com (DR 70), Yelp, Road Rescue (DR 45) |
+| dumpster rental miami | franchise sites (DR 38–56), Yelp, a **DR 8** local hauler |
 
-## Rejected (checked, but too competitive or too little money)
+**Pattern:** in most of these clusters, nobody structured owns the results. Yelp's generic search pages and DR 0–10 single-location sites hold the slots, so a real directory with city pages can take them.
 
-- **Too competitive:** pest control (187K, $9 CPC), HVAC repair (114K, $5), garage door repair (105K, $15), locksmith (241K), towing (84K, KD 62), storage units (547K), med spa (KD 66), axe throwing (KD 66), bail bonds (KD 67), fence company (KD 56).
-- **Directory-only (big volume and KD 0, but low CPC and owners who won't pay for SaaS):** tailor (99K), shoe repair (45K), escape room (112K), pickleball courts (66K), batting cages (56K), firewood (59K), tattoo shop (65K). These could earn ad revenue but are weak for SaaS.
-- **Too small:** farrier (1.5K), taxidermist (3.2K, ~0 per state), welding shop (2.6K, 0 at city level), crane service (1.8K).
+---
+
+## Recommended build order
+
+1. **Vehicle, boat and RV storage.** It has the biggest volume with the lowest KD, and the results are full of DR 0 sites. The software is outdoor-lot management: lot map, waitlist, recurring billing, gate codes and insurance documents. Lot owners pay $100–300/mo.
+2. **Air duct and dryer vent cleaning.** About 84K searches, all at KD 0 with $5–6 CPCs, and no vertical software. Build inspection reports, annual reminders and a review-request flow.
+3. **Waste and septic (dumpster + septic + porta potty + grease trap).** This continues what you've already started in Miami. Build one dispatch and asset-tracking tool and run four directories off it.
+4. **Water treatment and testing.** High CPCs and an obvious recurring workflow (salt delivery, filter changes, backflow certificates).
+5. **Wildlife removal.** Small but rich. Operators pay well and no one builds for them.
+
+## Caveats
+
+- **"Near me" volumes are national.** Ahrefs checked most of these results from Wichita, KS. Real traffic comes from `<service> <city>` pages, usually 50–1,500 searches a month each.
+- **KD 0** means the top pages have few backlinks. It does not mean no competition; the map pack still sits above them.
+- **Operator counts and software competitor names are my estimates, not Ahrefs data.** Check each one on G2 or Capterra before you build.
+- **Google Business Profile data:** scraping it violates Google's terms. Plan to enrich listings from each business's own website, which is also what makes a directory rank.
+- **Ahrefs budget:** about 5K units remain until the 2026-11-11 reset.
